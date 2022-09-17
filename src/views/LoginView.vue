@@ -11,6 +11,10 @@ const toggleShow = () => {
 
 <template>
     <main class="text-center h-screen absolute w-full inset-y-0 bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
+        <div class="text-white mb-4 mt-14 md:mt-20 grid justify-center">
+            <img class="w-36" src="../assets/tutulogo.svg" alt="tutologo">
+        </div>
+        <span class="text-white">Welcome to tutu - wallets for all</span>
         <div class="grid justify-center">
             <form class="mt-4 py-10 px-10 bg-white w-[80vw] md:w-[40vw] rounded-lg drop-shadow-lg">
             <div class="flex flex-col">

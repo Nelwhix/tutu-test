@@ -9,14 +9,25 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: AppVue
+      component: LoginView,
+      meta: {
+        title: 'Login'
+      }
     },
     {
       path: '/signup',
       name: 'signup',
-      component: RegisterView
+      component: RegisterView,
+      meta: {
+        title: 'Sign Up'
+      }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title} | Tutu-test`;
+  next();
+});
 
 export default router
