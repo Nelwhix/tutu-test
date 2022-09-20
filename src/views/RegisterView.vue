@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, url, sameAs } from '@vuelidate/validators'
+import { useUserStore } from '@/stores/userStore';
 
 const formData = reactive({
     platform: '',
@@ -10,17 +11,23 @@ const formData = reactive({
     domain: '',
     description: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    hasAgreed: false
 })
+
+const serverErrors = ref(null)
     
-const rules = {
-    platform: { required },
-    email: { required, email },
-    domain: { required, url },
-    description: { required },
-    password: { required },
-    password_confirmation: { required, sameAs: sameAs(formData.password)}
-}
+const rules = computed(() => {
+    return {
+        platform: { required },
+        email: { required, email },
+        domain: { required, url },
+        description: { required },
+        password: { required },
+        password_confirmation: { required, sameAs: sameAs(formData.password)},
+        hasAgreed: { required, sameAs: sameAs(true)}
+    }
+})
 
 const v$ = useVuelidate(rules, formData)
     const showPassword = ref(false)
@@ -34,10 +41,13 @@ const v$ = useVuelidate(rules, formData)
     }
 
 const signUp = async () => {
+    const userStore = useUserStore()
     const result = await v$.value.$validate();
 
     if (result) {
-        alert("sucess, form submitted!")
+        const userStore = useUserStore()
+        
+        userStore.register(formData, serverErrors)
     } else {
         alert("error, form not submitted")
     }
@@ -45,7 +55,7 @@ const signUp = async () => {
 </script>
     
     <template>
-        <main class="text-center h-screen absolute w-full inset-y-0 bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
+        <main class="text-center absolute inset-y-0 w-full bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
             <div class="text-white mb-4 mt-14 md:mt-20 grid justify-center">
                 <img class="w-36" src="../assets/tutulogo.svg" alt="tutologo">
             </div>
@@ -99,8 +109,9 @@ const signUp = async () => {
                 </div>
                 </div>
                 <div class="text-start mt-4">
-                    <input type="checkbox" id="agreement" class="mt-2">
+                    <input v-model="formData.hasAgreed" type="checkbox" id="agreement" class="mt-2">
                     <label for="agreement" class="ml-2">I agree with the terms and conditions</label>
+                    <span v-if="v$.hasAgreed.$error" class="text-red-400">{{ v$.hasAgreed.$errors[0].$message }}</span>
                 </div>
                 <button type="submit" class="mb-8 rounded-md block text-white bg-[#1f2895] w-full py-3 mt-8">SIGNUP</button>
                 <span >Already have an account?<router-link :to="{name: 'login'}" class="text-[#3742d0]"> Login</router-link></span>
