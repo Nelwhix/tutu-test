@@ -4,6 +4,11 @@ import router from './router'
 import { createPinia } from 'pinia'
 
 import './index.css'
+import type { Router } from 'vue-router'
+
+declare module 'pinia' {export interface PiniaCustomProperties {
+    $router: Router
+}}
 
 const pinia = createPinia()
 const app = createApp(App)

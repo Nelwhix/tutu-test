@@ -5,7 +5,7 @@ export const useUserStore = defineStore("userStore", {
     state: () => {
         return {
             isLoading: false,
-            serverResponse: null
+            serverResponse: null as UserInfo | null,
         }
     },
     actions: {
@@ -44,3 +44,14 @@ export const useUserStore = defineStore("userStore", {
         },
     }
 })
+
+interface UserInfo {
+    token: string
+    expire: string
+    platform: {
+        plid: string
+        description: string
+        domain: string
+        email: string
+    }
+}
