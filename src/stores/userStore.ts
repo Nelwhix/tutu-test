@@ -14,10 +14,29 @@ export const useUserStore = defineStore("userStore", {
 
             axios.post('/v1/platform/open/create', form)
                 .then(response => {
-                    this.serverResponse = response.data.info.platform
+                    console.log(response)
+                    this.serverResponse = response.data.info
+                    this.$router.push({name: 'dashboard'})
                 })
                 .catch(error => {
+                    console.log(error)
                     serverErrors = error.response
+                })
+                .then(() => {
+                    this.isLoading = false
+                })
+        },
+
+        login(form: Object) {
+            this.isLoading = true
+
+            axios.post('/v1/platform/open/login', form)
+                .then(response => {
+                    this.serverResponse = response.data.info
+                    this.$router.push({name: 'dashboard'})
+                })
+                .catch(error => {
+                    console.log(error)
                 })
                 .then(() => {
                     this.isLoading = false

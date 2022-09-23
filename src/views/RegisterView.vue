@@ -45,9 +45,16 @@ const signUp = async () => {
     const result = await v$.value.$validate();
 
     if (result) {
-        const userStore = useUserStore()
-        
-        userStore.register(formData, serverErrors)
+        const signUpForm = {
+            "email": formData.email,
+            "password": formData.password,
+            "name": formData.platform,
+            "description": formData.description,
+            "domain": formData.domain,
+            "logo": ""
+        }
+
+        userStore.register(signUpForm, serverErrors)
     } else {
         alert("error, form not submitted")
     }
@@ -55,7 +62,7 @@ const signUp = async () => {
 </script>
     
     <template>
-        <main class="text-center absolute inset-y-0 w-full bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
+        <main class="text-center h-[200vh] absolute inset-y-0 w-full bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
             <div class="text-white mb-4 mt-14 md:mt-20 grid justify-center">
                 <img class="w-36" src="../assets/tutulogo.svg" alt="tutologo">
             </div>

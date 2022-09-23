@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
+import { useUserStore } from '@/stores/userStore';
 
 const state = reactive({
     email: '',
@@ -10,7 +11,7 @@ const state = reactive({
 })
 
 const rules = {
-    email: { required, email },
+    email: { required},
     password: {required}
 }
 
@@ -26,7 +27,13 @@ const login = async () => {
     const result = await v$.value.$validate();
 
     if (result) {
-        alert("sucess, form submitted!")
+        const formData = {
+            "login": state.email,
+            "password": state.password
+        }
+        const userStore = useUserStore()
+
+        userStore.login(formData);
     } else {
         alert("error, form not submitted")
     }
@@ -34,7 +41,7 @@ const login = async () => {
 </script>
 
 <template>
-    <main class="text-center h-screen absolute w-full inset-y-0 bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
+    <main class="text-center h-[120vh] absolute w-full inset-y-0 bg-gradient-to-r from-[#3742d0] to-[#1f2895]">
         <div class="text-white mb-4 mt-14 md:mt-20 grid justify-center">
             <img class="w-36" src="../assets/tutulogo.svg" alt="tutologo">
         </div>
@@ -43,7 +50,7 @@ const login = async () => {
             <form @submit.prevent="login" class="mt-4 py-10 px-10 bg-white w-[80vw] md:w-[40vw] rounded-lg drop-shadow-lg">
             <div class="flex flex-col">
                 <label for="login" class="text-start">Login</label>
-                <input v-model="state.email" type="email" id="login" placeholder="Enter email or plid" class="focus:outline focus:outline-[3px] border rounded-md pl-3 py-3 mt-2 focus:border-blue-100 focus:outline-blue-200 focus:bg-gray-100">
+                <input v-model="state.email" type="text" id="login" placeholder="Enter email or plid" class="focus:outline focus:outline-[3px] border rounded-md pl-3 py-3 mt-2 focus:border-blue-100 focus:outline-blue-200 focus:bg-gray-100">
                 <span v-if="v$.email.$error" class="text-red-400">{{ v$.email.$errors[0].$message }}</span>
             </div>
             <div class="flex flex-col mt-5 relative">

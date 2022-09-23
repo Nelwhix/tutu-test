@@ -1,4 +1,5 @@
 import AppVue from '@/App.vue'
+import DashboardVue from '@/views/Dashboard.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -20,6 +21,14 @@ const router = createRouter({
       component: RegisterView,
       meta: {
         title: 'Sign Up'
+      }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardVue,
+      meta: {
+        title: 'Dashboard'
       }
     }
   ]
